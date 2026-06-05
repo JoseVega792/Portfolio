@@ -270,8 +270,8 @@
         .edu-card { background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 30px;box-shadow:var(--shadow-sm);backdrop-filter:var(--card-filter);-webkit-backdrop-filter:var(--card-filter);transition:background-color .35s,border-color .35s,box-shadow .35s,transform .3s; }
         .edu-card:hover { border-color:var(--border-h);transform:translateY(-3px);box-shadow:var(--shadow-md); }
         .edu-logo-wrap { margin-bottom:18px; }
-        .edu-logo { width:44px;height:44px;border-radius:11px;overflow:hidden;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;background:var(--surface);transition:background-color .35s,border-color .35s; }
-        .edu-logo img { width:100%;height:100%;object-fit:contain;padding:7px; }
+        .edu-logo { width:72px;height:72px;border-radius:14px;overflow:hidden;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;background:var(--surface);transition:background-color .35s,border-color .35s; }
+        .edu-canvas { width:72px;height:72px;display:block; }
         .edu-degree { font-size:17px;font-weight:600;letter-spacing:-.4px;margin-bottom:4px; }
         .edu-school { font-size:12px;font-weight:500;color:var(--text-2);margin-bottom:8px; }
         .edu-period { font-size:12px;color:var(--text-3);margin-bottom:12px; }
@@ -504,7 +504,7 @@
     <h2 class="section-title fade-in">Education</h2>
     <div class="edu-grid">
         <div class="edu-card fade-in">
-            <div class="edu-logo-wrap"><div class="edu-logo"><img src="https://logo.clearbit.com/utep.edu" alt="UTEP" onerror="this.style.display='none'"></div></div>
+            <div class="edu-logo-wrap"><div class="edu-logo"><canvas class="edu-canvas"></canvas></div></div>
             <div class="edu-degree">M.S. Computer Science</div>
             <div class="edu-school">The University of Texas at El Paso</div>
             <div class="edu-period">May 2023 – May 2025</div>
@@ -512,7 +512,7 @@
             <div class="edu-courses"><strong>Coursework:</strong> Machine Learning, Software Construction, Software Integration &amp; V&amp;V, Data Mining</div>
         </div>
         <div class="edu-card fade-in">
-            <div class="edu-logo-wrap"><div class="edu-logo"><img src="https://logo.clearbit.com/utep.edu" alt="UTEP" onerror="this.style.display='none'"></div></div>
+            <div class="edu-logo-wrap"><div class="edu-logo"><canvas class="edu-canvas"></canvas></div></div>
             <div class="edu-degree">B.S. Computer Science</div>
             <div class="edu-school">The University of Texas at El Paso</div>
             <div class="edu-period">Sept 2020 – May 2023</div>
@@ -874,6 +874,72 @@ function updateGlobeTheme(isDark) {
         camera.updateProjectionMatrix();
     });
 })();
+
+/* ══════════════════════════════════════════
+   UTEP Pickaxe (education section)
+══════════════════════════════════════════ */
+if (typeof THREE !== 'undefined') {
+    function initPickaxe(canvas) {
+        const S     = 72;
+        const color = 0xFF8200; // UTEP orange
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setSize(S, S);
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+        renderer.setClearColor(0, 0);
+
+        const scene  = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+        camera.position.z = 2.5;
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+        const pl = new THREE.PointLight(color, 2.0, 10);
+        pl.position.set(2, 2, 3);
+        scene.add(pl);
+
+        const lm = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.70 });
+        const fm = new THREE.MeshPhongMaterial({ color, transparent: true, opacity: 0.14, shininess: 80 });
+
+        function part(geo) {
+            const g = new THREE.Group();
+            g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lm));
+            g.add(new THREE.Mesh(geo.clone(), fm));
+            return g;
+        }
+
+        const root = new THREE.Group();
+        root.position.set(0.02, 0.08, 0);  // center the overall shape
+        root.rotation.y =  0.28;            // slight 3-D tilt
+        root.rotation.x = -0.12;
+        scene.add(root);
+
+        // Horizontal head bar
+        const bar = part(new THREE.CylinderGeometry(0.050, 0.050, 0.55, 8));
+        bar.rotation.z = Math.PI / 2;
+        bar.position.set(0, 0.24, 0);
+        root.add(bar);
+
+        // Pick (left) — thin tip at the far left
+        const pick = part(new THREE.CylinderGeometry(0.008, 0.050, 0.30, 8));
+        pick.rotation.z = Math.PI / 2;      // tip → -X
+        pick.position.set(-0.425, 0.24, 0); // base meets bar end at x=-0.275
+        root.add(pick);
+
+        // Adze (right) — wider chisel tip
+        const adze = part(new THREE.CylinderGeometry(0.050, 0.008, 0.25, 8));
+        adze.rotation.z = -Math.PI / 2;     // wider end → +X
+        adze.position.set(0.400, 0.24, 0);  // base meets bar end at x=+0.275
+        root.add(adze);
+
+        // Handle
+        const handle = part(new THREE.CylinderGeometry(0.044, 0.054, 0.70, 8));
+        handle.position.set(0, -0.11, 0);   // top at 0.24, meets bar ✓
+        root.add(handle);
+
+        renderer.render(scene, camera);
+    }
+
+    document.querySelectorAll('.edu-canvas').forEach(c => initPickaxe(c));
+}
 </script>
 
 </body>
