@@ -844,16 +844,16 @@ if (typeof THREE !== 'undefined') {
         arc.position.set(0, -0.015, 0);  // center sits below head level
         root.add(arc);
 
-        // Pick (left) — true cone, sharp point at far left
+        // Pick (left) — cone from arc left endpoint, pointing down-left
         const pick = part(new THREE.CylinderGeometry(0, 0.055, 0.32, 8));
-        pick.rotation.z = Math.PI / 2;       // apex (radius=0) → -X
-        pick.position.set(-0.435, 0.24, 0);  // base at x=-0.275, tip at x=-0.595
+        pick.rotation.z = Math.PI * 5 / 6;  // apex → down-left (~30° from vertical)
+        pick.position.set(-0.368, 0.116, 0);
         root.add(pick);
 
-        // Adze (right) — true cone, sharp point at far right
+        // Adze (right) — cone from arc right endpoint, pointing down-right
         const adze = part(new THREE.CylinderGeometry(0, 0.055, 0.27, 8));
-        adze.rotation.z = -Math.PI / 2;      // apex (radius=0) → +X
-        adze.position.set(0.410, 0.24, 0);   // base at x=+0.275, tip at x=+0.545
+        adze.rotation.z = -Math.PI * 5 / 6; // apex → down-right (~30° from vertical)
+        adze.position.set(0.350, 0.145, 0);
         root.add(adze);
 
         // Handle
