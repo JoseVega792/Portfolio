@@ -781,7 +781,7 @@ if (typeof THREE !== 'undefined') {
 } /* end THREE guard */
 
 /* ── Card 3D tilt ── */
-document.querySelectorAll('.story-card').forEach((card, i) => {
+document.querySelectorAll('.story-card, .edu-card, .exp-card, .stat-card, .skill-card').forEach((card, i) => {
     card.addEventListener('mousemove', (e) => {
         const r = card.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width  - 0.5;
@@ -880,7 +880,7 @@ if (typeof THREE !== 'undefined') {
         const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
         camera.position.z = 2.0;
 
-        const C = type === 'bolt' ? 0xFF8200 : 0x5B8DEF;
+        const C = type === 'bolt' ? 0xFFCC00 : 0x5B8DEF;
         scene.add(new THREE.AmbientLight(0xffffff, 0.5));
         const pl = new THREE.PointLight(C, 2.0, 10);
         pl.position.set(2, 2, 3);
@@ -899,29 +899,24 @@ if (typeof THREE !== 'undefined') {
         scene.add(root);
 
         if (type === 'bolt') {
-            /* Lightning bolt: pointed V-notches at waist + energy ring + sparks */
+            /* Classic ⚡ shape: wide top, one-sided step/notch, pointed tip — yellow mesh */
             const shape = new THREE.Shape();
-            shape.moveTo( 0.10,  0.54);
-            shape.lineTo(-0.20,  0.54);
-            shape.lineTo(-0.04,  0.06);
-            shape.lineTo(-0.15, -0.07);  // sharp V-tip upper notch
-            shape.lineTo(-0.26,  0.06);
-            shape.lineTo(-0.10, -0.54);
-            shape.lineTo( 0.20, -0.54);
-            shape.lineTo( 0.04, -0.06);
-            shape.lineTo( 0.15,  0.07);  // sharp V-tip lower notch
-            shape.lineTo( 0.26, -0.06);
+            shape.moveTo(-0.06,  0.60);   // top-left
+            shape.lineTo( 0.24,  0.60);   // top-right (wide)
+            shape.lineTo( 0.08,  0.02);   // right side steps INWARD
+            shape.lineTo( 0.28,  0.02);   // step bumps OUT to the right (the notch)
+            shape.lineTo(-0.08, -0.60);   // pointed tip
             shape.closePath();
-            const bolt = part(new THREE.ExtrudeGeometry(shape, { depth: 0.06, bevelEnabled: false }));
-            bolt.position.z = -0.03;
+            const bolt = part(new THREE.ExtrudeGeometry(shape, { depth: 0.07, bevelEnabled: false }));
+            bolt.position.z = -0.035;
             root.add(bolt);
 
             // Energy ring framing the bolt
-            root.add(part(new THREE.TorusGeometry(0.40, 0.018, 6, 28)));
+            root.add(part(new THREE.TorusGeometry(0.42, 0.018, 6, 28)));
 
-            // Spark octahedra scattered around the bolt tips and sides
-            [ [ 0.30,  0.46, 0.058], [-0.30, -0.46, 0.058],
-              [ 0.38,  0.00, 0.040], [-0.38,  0.00, 0.040] ].forEach(([x, y, r]) => {
+            // Spark octahedra scattered around the bolt
+            [ [ 0.34,  0.50, 0.052], [-0.28, -0.52, 0.052],
+              [ 0.40,  0.00, 0.038], [-0.40,  0.10, 0.038] ].forEach(([x, y, r]) => {
                 const sp = part(new THREE.OctahedronGeometry(r));
                 sp.position.set(x, y, 0);
                 root.add(sp);
