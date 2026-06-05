@@ -687,18 +687,20 @@ if (typeof THREE !== 'undefined') {
             g.add(r1); g.add(r2);
 
         } else if (idx === 2) {
-            /* ── Amazon: arrow (the A→Z smile concept) ── */
-            // Center the group: arrow spans x=-0.34 to x=0.70, center at 0.18
-            g.position.set(-0.18, 0, 0);
-            // Shaft — horizontal cylinder from x=-0.34 to x=0.34
-            const shaft = mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.68, 10));
-            shaft.rotation.z = Math.PI / 2;
-            g.add(shaft);
-            // Arrowhead — cone pointing right, base at x=0.34, apex at x=0.70
-            const head = mesh(new THREE.ConeGeometry(0.175, 0.36, 10));
-            head.rotation.z = -Math.PI / 2;
-            head.position.set(0.52, 0, 0);
-            g.add(head);
+            /* ── Amazon: envelope (two-factor messaging work) ── */
+            // Envelope body
+            const body = mesh(new THREE.BoxGeometry(0.82, 0.56, 0.07));
+            g.add(body);
+            // Classic four fold-lines on the front face, all meeting at center
+            const foldGeo = new THREE.BufferGeometry();
+            foldGeo.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array([
+                -0.41,  0.28, 0.045,   0.0,  0.0, 0.045,
+                 0.41,  0.28, 0.045,   0.0,  0.0, 0.045,
+                -0.41, -0.28, 0.045,   0.0,  0.0, 0.045,
+                 0.41, -0.28, 0.045,   0.0,  0.0, 0.045,
+            ]), 3));
+            g.add(new THREE.LineSegments(foldGeo,
+                new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.75 })));
 
         } else if (idx === 3) {
             /* ── Google: magnifying glass ── */
