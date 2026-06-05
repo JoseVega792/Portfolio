@@ -572,8 +572,7 @@
     <div class="card-stack">
         <div class="exp-card fade-in">
             <div class="company-logo">
-                <img src="https://logo.clearbit.com/utep.edu" alt="UTEP" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <span class="logo-fallback" style="font-size:10px">UTEP</span>
+                <canvas class="research-canvas" data-mesh="bolt" style="display:block;width:56px;height:56px"></canvas>
             </div>
             <div>
                 <div class="exp-header"><span class="exp-title">Graduate Research Assistant</span><span class="exp-period">Dec 2024 – May 2025</span></div>
@@ -586,8 +585,8 @@
             </div>
         </div>
         <div class="exp-card fade-in">
-            <div class="company-logo" style="background:var(--surface);">
-                <span class="logo-fallback" style="display:flex;font-size:10px;font-weight:700;color:var(--text-2)">REU</span>
+            <div class="company-logo">
+                <canvas class="research-canvas" data-mesh="bird" style="display:block;width:56px;height:56px"></canvas>
             </div>
             <div>
                 <div class="exp-header"><span class="exp-title">Undergraduate Research Assistant</span><span class="exp-period">Jan 2022 – Dec 2023</span></div>
@@ -832,47 +831,112 @@ if (typeof THREE !== 'undefined') {
         }
 
         const root = new THREE.Group();
-        root.rotation.y =  0.50;   // show board corner
-        root.rotation.x = -0.32;   // slight top-down view
         scene.add(root);
 
-        // Flat square board — WireframeGeometry shows the subdivision grid
-        const boardGeo = new THREE.BoxGeometry(1.20, 0.07, 1.20, 5, 1, 5);
+        // Diamond board: flat square in XY, rotated 45° → classic mortarboard diamond silhouette
+        const boardGeo = new THREE.BoxGeometry(0.70, 0.70, 0.04, 3, 3, 1);
         const board = part(boardGeo, true);
-        board.position.set(0, 0.12, 0);
+        board.rotation.z = Math.PI / 4;
+        board.position.set(0, 0.22, 0);
         root.add(board);
 
-        // Cylinder cap sitting under the board centre
-        const capGeo = new THREE.CylinderGeometry(0.28, 0.22, 0.30, 10);
-        const cap = part(capGeo);
-        cap.position.set(0, -0.025, 0); // top at 0.125 ≈ board bottom
-        root.add(cap);
+        // Horizontal brim band below the board
+        const brimGeo = new THREE.BoxGeometry(0.70, 0.09, 0.04);
+        const brim = part(brimGeo);
+        brim.position.set(0, -0.28, 0);
+        root.add(brim);
 
-        // Small button at board centre-top
-        const btnGeo = new THREE.SphereGeometry(0.046, 8, 6);
-        const btn = part(btnGeo);
-        btn.position.set(0, 0.175, 0);
-        root.add(btn);
-
-        // Tassel cord drooping to the right
-        // rotation.z = π/6 → local +Y points up-left, so bottom of cord goes down-right
-        const cordGeo = new THREE.CylinderGeometry(0.011, 0.011, 0.46, 6);
+        // Tassel cord hanging from right side of brim
+        const cordGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.24, 6);
         const cord = part(cordGeo);
-        cord.rotation.z =  Math.PI / 6;
-        cord.rotation.x = -0.12;
-        cord.position.set(0.11, -0.005, 0.07);
+        cord.position.set(0.33, -0.45, 0);
         root.add(cord);
 
-        // Tassel end (small cylinder at cord tip)
-        const tasGeo = new THREE.CylinderGeometry(0.036, 0.024, 0.13, 6);
+        // Tassel end
+        const tasGeo = new THREE.CylinderGeometry(0.030, 0.020, 0.08, 6);
         const tas = part(tasGeo);
-        tas.position.set(0.225, -0.225, 0.09);
+        tas.position.set(0.33, -0.61, 0);
         root.add(tas);
 
         renderer.render(scene, camera);
     }
 
     document.querySelectorAll('.edu-canvas').forEach(c => initGradCap(c));
+}
+
+/* ══════════════════════════════════════════
+   Research section meshes
+══════════════════════════════════════════ */
+if (typeof THREE !== 'undefined') {
+    function initResearchMesh(canvas) {
+        const type = canvas.dataset.mesh;
+        const S = 56;
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setSize(S, S);
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+        renderer.setClearColor(0, 0);
+
+        const scene  = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
+        camera.position.z = 2.0;
+
+        const C = type === 'bolt' ? 0xFF8200 : 0x5B8DEF;
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+        const pl = new THREE.PointLight(C, 2.0, 10);
+        pl.position.set(2, 2, 3);
+        scene.add(pl);
+
+        const lm = new THREE.LineBasicMaterial({ color: C, transparent: true, opacity: 0.80 });
+        const fm = new THREE.MeshPhongMaterial({ color: C, transparent: true, opacity: 0.15, shininess: 80 });
+        function part(geo) {
+            const grp = new THREE.Group();
+            grp.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lm));
+            grp.add(new THREE.Mesh(geo.clone(), fm));
+            return grp;
+        }
+
+        const root = new THREE.Group();
+        scene.add(root);
+
+        if (type === 'bolt') {
+            /* Lightning bolt: flat ExtrudeGeometry polygon */
+            const shape = new THREE.Shape();
+            shape.moveTo( 0.05,  0.55);
+            shape.lineTo(-0.15,  0.55);
+            shape.lineTo(-0.05,  0.05);
+            shape.lineTo(-0.20,  0.05);
+            shape.lineTo(-0.05, -0.55);
+            shape.lineTo( 0.15, -0.55);
+            shape.lineTo( 0.05, -0.05);
+            shape.lineTo( 0.20, -0.05);
+            shape.closePath();
+            const geo = new THREE.ExtrudeGeometry(shape, { depth: 0.04, bevelEnabled: false });
+            const bolt = part(geo);
+            bolt.position.z = -0.02;
+            root.add(bolt);
+        } else {
+            /* Bird: two wing bars + small body */
+            // Left wing (goes up-left from body)
+            const lwGeo = new THREE.BoxGeometry(0.52, 0.09, 0.04);
+            const lw = part(lwGeo);
+            lw.rotation.z = 0.40;
+            lw.position.set(-0.20, 0.07, 0);
+            root.add(lw);
+            // Right wing (mirror)
+            const rwGeo = new THREE.BoxGeometry(0.52, 0.09, 0.04);
+            const rw = part(rwGeo);
+            rw.rotation.z = -0.40;
+            rw.position.set(0.20, 0.07, 0);
+            root.add(rw);
+            // Body
+            const bodyGeo = new THREE.SphereGeometry(0.09, 8, 6);
+            root.add(part(bodyGeo));
+        }
+
+        renderer.render(scene, camera);
+    }
+
+    document.querySelectorAll('.research-canvas').forEach(c => initResearchMesh(c));
 }
 
 </script>
