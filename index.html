@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jose R. Vega — Software Engineer</title>
+    <style>
+        :root {
+            --bg-primary: #f5f5f7;
+            --bg-secondary: #ffffff;
+            --bg-dark: #1d1d1f;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #86868b;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --border: rgba(0,0,0,0.08);
+            --shadow-sm: 0 2px 12px rgba(0,0,0,0.06);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.1);
+            --radius-md: 18px;
+            --radius-lg: 24px;
+            --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ── Navigation ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            height: 52px;
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.3px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+            letter-spacing: -0.1px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active { color: var(--text-primary); }
+
+        /* ── Layout ── */
+        .section-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 100px 48px;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 48px;
+        }
+
+        .hero-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-eyebrow {
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: -0.2px;
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero-name {
+            font-size: clamp(60px, 8vw, 100px);
+            font-weight: 700;
+            letter-spacing: -4px;
+            line-height: 1.0;
+            color: var(--text-primary);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.4s forwards;
+        }
+
+        .hero-tagline {
+            font-size: clamp(18px, 2.4vw, 24px);
+            font-weight: 400;
+            color: var(--text-secondary);
+            letter-spacing: -0.4px;
+            line-height: 1.45;
+            max-width: 580px;
+            margin-bottom: 44px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.6s forwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.8s forwards;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 980px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: rgba(0,0,0,0.06);
+            color: var(--text-primary);
+            border-radius: 980px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0,0,0,0.1);
+            transform: scale(1.02);
+        }
+
+        /* ── Section headers ── */
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            color: var(--text-primary);
+            margin-bottom: 48px;
+        }
+
+        /* ── Stats row ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: var(--radius-md);
+            padding: 36px 32px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .stat-number {
+            font-size: 44px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ── Experience cards ── */
+        .card-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .exp-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 36px 40px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: grid;
+            grid-template-columns: 52px 1fr;
+            gap: 24px;
+            align-items: start;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .exp-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .company-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+            letter-spacing: -0.3px;
+        }
+
+        .logo-c1   { background: #d03027; color: #fff; }
+        .logo-gd   { background: #0caa41; color: #fff; }
+        .logo-amz  { background: #ff9900; color: #1a1a1a; }
+        .logo-g    { background: #4285f4; color: #fff; }
+        .logo-utep { background: #ff8200; color: #fff; }
+        .logo-res  { background: #5856d6; color: #fff; }
+
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .exp-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.4px;
+            color: var(--text-primary);
+        }
+
+        .exp-period {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .exp-company {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+
+        .exp-bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .exp-bullets li {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .exp-bullets li::before {
+            content: "·";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 22px;
+            line-height: 1.1;
+        }
+
+        /* ── Education ── */
+        .edu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .edu-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 36px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .edu-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .edu-logo-wrap { margin-bottom: 20px; }
+
+        .edu-degree {
+            font-size: 19px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .edu-school {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .edu-period {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: 14px;
+        }
+
+        .edu-gpa {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 14px;
+            background: rgba(0,113,227,0.08);
+            border-radius: 980px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 18px;
+        }
+
+        .edu-courses {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        .edu-courses strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* ── Skills ── */
+        .skills-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .skill-card {
+            background: #fff;
+            border-radius: var(--radius-md);
+            padding: 28px 32px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .skill-category-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.9px;
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .skill-tag {
+            padding: 7px 16px;
+            background: var(--bg-primary);
+            border-radius: 980px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            letter-spacing: -0.2px;
+            border: 1px solid rgba(0,0,0,0.07);
+            cursor: default;
+            transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+        }
+
+        .skill-tag:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        /* ── Contact ── */
+        .contact-card {
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            padding: 88px 64px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::before {
+            content: "";
+            position: absolute;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 640px;
+            height: 640px;
+            background: radial-gradient(circle, rgba(0,113,227,0.28) 0%, transparent 68%);
+            pointer-events: none;
+        }
+
+        .contact-title {
+            font-size: clamp(36px, 5vw, 58px);
+            font-weight: 700;
+            letter-spacing: -2px;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        .contact-subtitle {
+            font-size: 18px;
+            color: rgba(255,255,255,0.55);
+            margin-bottom: 44px;
+            font-weight: 400;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 980px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .contact-link:hover { transform: scale(1.03); opacity: 0.88; }
+
+        .cl-primary { background: #fff; color: var(--text-primary); }
+        .cl-ghost {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 28px 48px;
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* stagger children */
+        .fade-in:nth-child(2) { transition-delay: 0.07s; }
+        .fade-in:nth-child(3) { transition-delay: 0.14s; }
+        .fade-in:nth-child(4) { transition-delay: 0.21s; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            nav { padding: 0 24px; }
+            .nav-links { display: none; }
+            .hero { padding: 0 24px; }
+            .section-inner { padding: 80px 24px; }
+            .stats-row { grid-template-columns: 1fr; }
+            .edu-grid { grid-template-columns: 1fr; }
+            .exp-card { grid-template-columns: 1fr; }
+            .contact-card { padding: 56px 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+    <a href="#" class="nav-logo">Jose Vega</a>
+    <ul class="nav-links">
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+    <div class="hero-inner">
+        <p class="hero-eyebrow">Software Engineer &amp; ML Researcher</p>
+        <h1 class="hero-name">Jose R. Vega</h1>
+        <p class="hero-tagline">Building intelligent systems at the intersection of software engineering and machine learning. Currently at Capital One.</p>
+        <div class="hero-cta">
+            <a href="#experience" class="btn-primary">View My Work</a>
+            <a href="#contact" class="btn-secondary">Get in Touch</a>
+        </div>
+    </div>
+</div>
+
+<!-- Stats -->
+<div class="section-inner">
+    <div class="stats-row">
+        <div class="stat-card fade-in">
+            <div class="stat-number">4.0</div>
+            <div class="stat-label">Graduate GPA · Dean's List</div>
+        </div>
+        <div class="stat-card fade-in">
+            <div class="stat-number">4+</div>
+            <div class="stat-label">Top-tier companies</div>
+        </div>
+        <div class="stat-card fade-in">
+            <div class="stat-number">10+</div>
+            <div class="stat-label">Programming languages</div>
+        </div>
+    </div>
+</div>
+
+<!-- Experience -->
+<div class="section-inner" id="experience">
+    <p class="section-label fade-in">Where I've worked</p>
+    <h2 class="section-title fade-in">Experience</h2>
+
+    <div class="card-stack">
+
+        <div class="exp-card fade-in">
+            <div class="company-logo logo-c1">C1</div>
+            <div>
+                <div class="exp-header">
+                    <span class="exp-title">Software Engineer</span>
+                    <span class="exp-period">Aug 2025 – Present</span>
+                </div>
+                <div class="exp-company">Capital One</div>
+                <ul class="exp-bullets">
+                    <li>Led development of Capital One's first ML-powered Interactive Voice Response (IVR) fallback system, identifying self-service capabilities for customers and providing deep links that reduced agent escalations.</li>
+                    <li>Increased digital message delivery from 50% to 95% by optimizing backend request handling and deploying scalable ML-driven workflows, improving system reliability, latency, and customer experience.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="exp-card fade-in">
+            <div class="company-logo logo-gd">GD</div>
+            <div>
+                <div class="exp-header">
+                    <span class="exp-title">Machine Learning Engineer Intern</span>
+                    <span class="exp-period">June 2024 – Aug 2024</span>
+                </div>
+                <div class="exp-company">Glassdoor</div>
+                <ul class="exp-bullets">
+                    <li>Developed a robust ML-based testing service to enhance endpoint comparison accuracy, improving user-generated content quality and laying the foundation for broader testing applications.</li>
+                    <li>Architected a dynamic testing service supporting multiple comparison types using Java, Spring Boot, reactive programming, and Mockito.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="exp-card fade-in">
+            <div class="company-logo logo-amz">AMZ</div>
+            <div>
+                <div class="exp-header">
+                    <span class="exp-title">Software Development Engineer Intern</span>
+                    <span class="exp-period">June 2023 – Aug 2023</span>
+                </div>
+                <div class="exp-company">Amazon</div>
+                <ul class="exp-bullets">
+                    <li>Streamlined the two-factor messaging process, reducing cost by ~14% using Java, Spring Boot, Mockito, and internal tooling to deliver new messaging streams.</li>
+                    <li>Collaborated with a global engineering team in an agile environment to architect new APIs, improving the efficiency and scalability of existing systems.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="exp-card fade-in">
+            <div class="company-logo logo-g">G</div>
+            <div>
+                <div class="exp-header">
+                    <span class="exp-title">CS Summer Institute Scholar</span>
+                    <span class="exp-period">June 2021 – July 2021</span>
+                </div>
+                <div class="exp-company">Google</div>
+                <ul class="exp-bullets">
+                    <li>Completed a project-based JavaScript and Firebase curriculum taught by Google engineers; built individual projects applying variables, data structures, and functions.</li>
+                    <li>Co-created a sports tracker app with a live demonstration and presentation to Google employees and community leaders.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Education -->
+<div class="section-inner" id="education">
+    <p class="section-label fade-in">Academic background</p>
+    <h2 class="section-title fade-in">Education</h2>
+
+    <div class="edu-grid">
+
+        <div class="edu-card fade-in">
+            <div class="edu-logo-wrap">
+                <div class="company-logo logo-utep">MS</div>
+            </div>
+            <div class="edu-degree">M.S. Computer Science</div>
+            <div class="edu-school">The University of Texas at El Paso</div>
+            <div class="edu-period">May 2023 – May 2025</div>
+            <div class="edu-gpa">GPA 4.0 / 4.0 · Dean's List</div>
+            <div class="edu-courses">
+                <strong>Coursework:</strong> Machine Learning, Software Construction, Software Integration &amp; V&amp;V, Data Mining
+            </div>
+        </div>
+
+        <div class="edu-card fade-in">
+            <div class="edu-logo-wrap">
+                <div class="company-logo logo-utep">BS</div>
+            </div>
+            <div class="edu-degree">B.S. Computer Science</div>
+            <div class="edu-school">The University of Texas at El Paso</div>
+            <div class="edu-period">Sept 2020 – May 2023</div>
+            <div class="edu-gpa">GPA 3.74 / 4.0</div>
+            <div class="edu-courses">
+                <strong>Coursework:</strong> Data Structures &amp; Algorithms, Advanced OOP, Computer Architecture, Programming Languages
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Skills -->
+<div class="section-inner" id="skills">
+    <p class="section-label fade-in">What I work with</p>
+    <h2 class="section-title fade-in">Skills</h2>
+
+    <div class="skills-stack">
+
+        <div class="skill-card fade-in">
+            <div class="skill-category-title">Programming Languages</div>
+            <div class="skill-tags">
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">Java</span>
+                <span class="skill-tag">C++</span>
+                <span class="skill-tag">Ruby</span>
+                <span class="skill-tag">Haskell</span>
+                <span class="skill-tag">Julia</span>
+                <span class="skill-tag">Bash</span>
+                <span class="skill-tag">Lisp</span>
+                <span class="skill-tag">Prolog</span>
+            </div>
+        </div>
+
+        <div class="skill-card fade-in">
+            <div class="skill-category-title">Frameworks &amp; Technologies</div>
+            <div class="skill-tags">
+                <span class="skill-tag">Spring Boot</span>
+                <span class="skill-tag">PyTorch</span>
+                <span class="skill-tag">TensorFlow</span>
+                <span class="skill-tag">Scikit-learn</span>
+                <span class="skill-tag">Firebase</span>
+                <span class="skill-tag">AWS</span>
+                <span class="skill-tag">Linux</span>
+                <span class="skill-tag">Cloud Shell</span>
+                <span class="skill-tag">GitHub</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Research -->
+<div class="section-inner" id="research">
+    <p class="section-label fade-in">Published &amp; contributed work</p>
+    <h2 class="section-title fade-in">Research</h2>
+
+    <div class="card-stack">
+
+        <div class="exp-card fade-in">
+            <div class="company-logo logo-res">ML</div>
+            <div>
+                <div class="exp-header">
+                    <span class="exp-title">Graduate Research Assistant</span>
+                    <span class="exp-period">Dec 2024 – May 2025</span>
+                </div>
+                <div class="exp-company">UTEP Constraint Research &amp; Reading Group</div>
+                <ul class="exp-bullets">
+                    <li>Developed and published a Dynamic Outlier Filter-enhanced LSTM for hybrid floating photovoltaic hydropower (HFPVH) systems forecasting.</li>
+                    <li>Reduced model training time while improving accuracy and robustness across energy, environmental, and financial forecasting applications.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="exp-card fade-in">
+            <div class="company-logo logo-res">CNN</div>
+            <div>
+                <div class="exp-header">
+                    <span class="exp-title">Undergraduate Research Assistant</span>
+                    <span class="exp-period">Jan 2022 – Dec 2023</span>
+                </div>
+                <div class="exp-company">CAHSI REU Program</div>
+                <ul class="exp-bullets">
+                    <li>Developed a convolutional neural network (CNN) that improved Mallard duck species identification accuracy to 94.9%.</li>
+                    <li>Contributed standardized identification methods adopted by the Texas Parks &amp; Wildlife Department for wildlife management and research.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Contact -->
+<div class="section-inner" id="contact">
+    <div class="contact-card fade-in">
+        <h2 class="contact-title">Let's connect.</h2>
+        <p class="contact-subtitle">Open to new opportunities and conversations.</p>
+        <div class="contact-links">
+            <a href="mailto:jvega792@gmail.com" class="contact-link cl-primary">
+                ✉&nbsp; jvega792@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/Vega123" target="_blank" rel="noopener" class="contact-link cl-ghost">
+                LinkedIn ↗
+            </a>
+            <a href="tel:+19159965290" class="contact-link cl-ghost">
+                (915) 996-5290
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>© 2025 Jose R. Vega · El Paso, Texas</footer>
+
+<script>
+    // Scroll-triggered fade-ins
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(s => {
+            if (window.scrollY >= s.offsetTop - 80) current = s.id;
+        });
+        navLinks.forEach(a => {
+            a.classList.toggle('active', a.getAttribute('href') === `#${current}`);
+        });
+    }, { passive: true });
+</script>
+
+</body>
+</html>
