@@ -831,27 +831,33 @@ if (typeof THREE !== 'undefined') {
         }
 
         const root = new THREE.Group();
-        root.rotation.x = -0.18; // slight top-down tilt so the open book reads in 3D
+        root.rotation.y = 0.25; // angle to show hexagonal facets
         scene.add(root);
 
-        // Left page: angled open, subdivided so wireframe shows content lines
-        const lpGeo = new THREE.BoxGeometry(0.48, 0.86, 0.04, 3, 5, 1);
-        const lp = part(lpGeo, true);
-        lp.rotation.y = 0.42;
-        lp.position.set(-0.20, 0, 0);
-        root.add(lp);
+        // Hex body
+        const body = part(new THREE.CylinderGeometry(0.20, 0.20, 1.00, 6));
+        body.position.set(0, 0.10, 0);
+        root.add(body);
 
-        // Right page: mirror of left
-        const rpGeo = new THREE.BoxGeometry(0.48, 0.86, 0.04, 3, 5, 1);
-        const rp = part(rpGeo, true);
-        rp.rotation.y = -0.42;
-        rp.position.set(0.20, 0, 0);
-        root.add(rp);
+        // Sharpened wood tip (tapered hex cone, wide end meets body)
+        const tip = part(new THREE.CylinderGeometry(0.20, 0, 0.30, 6));
+        tip.position.set(0, -0.55, 0);
+        root.add(tip);
 
-        // Spine (center strip where pages meet)
-        const spineGeo = new THREE.BoxGeometry(0.06, 0.86, 0.10);
-        const spine = part(spineGeo);
-        root.add(spine);
+        // Graphite point (tiny cone below wood tip)
+        const point = part(new THREE.CylinderGeometry(0.04, 0, 0.08, 6));
+        point.position.set(0, -0.74, 0);
+        root.add(point);
+
+        // Metal ferrule band (sits at junction of body and eraser)
+        const band = part(new THREE.CylinderGeometry(0.22, 0.22, 0.06, 6));
+        band.position.set(0, 0.60, 0);
+        root.add(band);
+
+        // Eraser (slightly narrower cylinder at top)
+        const eraser = part(new THREE.CylinderGeometry(0.18, 0.18, 0.12, 6));
+        eraser.position.set(0, 0.66, 0);
+        root.add(eraser);
 
         renderer.render(scene, camera);
     }
