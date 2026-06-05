@@ -687,17 +687,18 @@ if (typeof THREE !== 'undefined') {
             g.add(r1); g.add(r2);
 
         } else if (idx === 2) {
-            /* ── Amazon: package box ── */
-            const box = mesh(new THREE.BoxGeometry(0.74, 0.74, 0.74));
-            g.add(box);
-            // Tape stripe across top face
-            const tape = mesh(new THREE.BoxGeometry(0.12, 0.76, 0.76));
-            tape.position.set(0, 0, 0);
-            g.add(tape);
-            // Horizontal seam line
-            const seam = mesh(new THREE.BoxGeometry(0.76, 0.025, 0.76));
-            seam.position.set(0, 0.10, 0);
-            g.add(seam);
+            /* ── Amazon: arrow (the A→Z smile concept) ── */
+            // Center the group: arrow spans x=-0.34 to x=0.70, center at 0.18
+            g.position.set(-0.18, 0, 0);
+            // Shaft — horizontal cylinder from x=-0.34 to x=0.34
+            const shaft = mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.68, 10));
+            shaft.rotation.z = Math.PI / 2;
+            g.add(shaft);
+            // Arrowhead — cone pointing right, base at x=0.34, apex at x=0.70
+            const head = mesh(new THREE.ConeGeometry(0.175, 0.36, 10));
+            head.rotation.z = -Math.PI / 2;
+            head.position.set(0.52, 0, 0);
+            g.add(head);
 
         } else if (idx === 3) {
             /* ── Google: magnifying glass ── */
