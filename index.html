@@ -300,7 +300,10 @@
         .skill-card { background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px 28px;box-shadow:var(--shadow-sm);backdrop-filter:var(--card-filter);-webkit-backdrop-filter:var(--card-filter);transition:background-color .35s,border-color .35s; }
         .skill-cat-title { font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.3px;color:var(--text-3);margin-bottom:14px; }
         .skill-tags { display:flex;flex-wrap:wrap;gap:7px; }
-        .skill-tag { padding:6px 14px;background:var(--bg);border:1px solid var(--border);border-radius:980px;font-size:13px;font-weight:500;color:var(--text-2);cursor:default;transition:background-color .2s,color .2s,border-color .2s,transform .2s; }
+        .skill-tag { padding:6px 14px;background:var(--bg);border:1px solid var(--border);border-radius:980px;font-size:13px;font-weight:500;color:var(--text-2);cursor:default;transition:background-color .2s,color .2s,border-color .2s,transform .2s;display:inline-flex;align-items:center;gap:7px; }
+        .skill-icon { width:15px;height:15px;flex-shrink:0;filter:brightness(0);opacity:.6;transition:opacity .2s,filter .2s; }
+        [data-theme="dark"] .skill-icon { filter:brightness(0) invert(1); }
+        .skill-tag:hover .skill-icon { filter:brightness(0) invert(1);opacity:1; }
         .skill-tag:hover { background:var(--tag-hover);color:var(--tag-hover-c);border-color:var(--tag-hover);transform:scale(1.05); }
 
         /* ── Contact ── */
@@ -579,33 +582,44 @@
         <div class="skill-card fade-in">
             <div class="skill-cat-title">Languages</div>
             <div class="skill-tags">
-                <span class="skill-tag">JavaScript</span><span class="skill-tag">Python</span>
-                <span class="skill-tag">Java</span><span class="skill-tag">C++</span>
-                <span class="skill-tag">Ruby</span><span class="skill-tag">Haskell</span>
-                <span class="skill-tag">Julia</span><span class="skill-tag">Bash</span>
-                <span class="skill-tag">Lisp</span><span class="skill-tag">Prolog</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/javascript" alt="">JavaScript</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/python" alt="">Python</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/java" alt="">Java</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/cplusplus" alt="">C++</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/ruby" alt="">Ruby</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/haskell" alt="">Haskell</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/julia" alt="">Julia</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/gnubash" alt="">Bash</span>
+                <span class="skill-tag">Lisp</span>
+                <span class="skill-tag">Prolog</span>
             </div>
         </div>
         <div class="skill-card fade-in">
             <div class="skill-cat-title">ML &amp; AI</div>
             <div class="skill-tags">
-                <span class="skill-tag">PyTorch</span><span class="skill-tag">TensorFlow</span>
-                <span class="skill-tag">Scikit-learn</span><span class="skill-tag">LSTM</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/pytorch" alt="">PyTorch</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/tensorflow" alt="">TensorFlow</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/scikitlearn" alt="">Scikit-learn</span>
+                <span class="skill-tag">LSTM</span>
                 <span class="skill-tag">CNN</span>
             </div>
         </div>
         <div class="skill-card fade-in">
             <div class="skill-cat-title">Backend &amp; Cloud</div>
             <div class="skill-tags">
-                <span class="skill-tag">Spring Boot</span><span class="skill-tag">AWS</span>
-                <span class="skill-tag">Firebase</span><span class="skill-tag">Linux</span>
-                <span class="skill-tag">Cloud Shell</span><span class="skill-tag">REST APIs</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/springboot" alt="">Spring Boot</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/amazonaws" alt="">AWS</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/firebase" alt="">Firebase</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/linux" alt="">Linux</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/googlecloud" alt="">Cloud Shell</span>
+                <span class="skill-tag">REST APIs</span>
             </div>
         </div>
         <div class="skill-card fade-in">
             <div class="skill-cat-title">Tools</div>
             <div class="skill-tags">
-                <span class="skill-tag">GitHub</span><span class="skill-tag">Mockito</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/github" alt="">GitHub</span>
+                <span class="skill-tag">Mockito</span>
                 <span class="skill-tag">Agile / Scrum</span>
             </div>
         </div>
