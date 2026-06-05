@@ -162,11 +162,7 @@
         .section-title { font-size:clamp(28px,3.5vw,44px);font-weight:700;letter-spacing:-1.5px;color:var(--text-1);margin-bottom:44px; }
 
         /* ── Stats ── */
-        .stats-row { display:grid;grid-template-columns:repeat(3,1fr);gap:14px; }
-        .stat-card { background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:36px 28px;text-align:center;box-shadow:var(--shadow-sm);backdrop-filter:var(--card-filter);-webkit-backdrop-filter:var(--card-filter);transition:background-color .35s,border-color .35s,box-shadow .35s,transform .3s; }
-        .stat-card:hover { border-color:var(--border-h);transform:translateY(-3px);box-shadow:var(--shadow-md); }
-        .stat-number { font-size:50px;font-weight:700;letter-spacing:-3px;line-height:1;color:var(--text-1);margin-bottom:8px; }
-        .stat-label { font-size:12px;color:var(--text-3); }
+
 
         /* ── Journey intro ── */
         .journey-intro {
@@ -347,7 +343,7 @@
             nav{padding:0 20px}
             .nav-links{display:none}
             .section-inner,.contact-inner{padding:72px 24px}
-            .stats-row{grid-template-columns:1fr}
+
             .edu-grid{grid-template-columns:1fr}
             .exp-card{grid-template-columns:1fr}
             .story-card,.story-card.story-flip{grid-template-columns:1fr}
@@ -412,14 +408,6 @@
     </div>
 </div>
 
-<!-- Stats -->
-<div class="section-inner">
-    <div class="stats-row">
-        <div class="stat-card fade-in"><div class="stat-number">4.0</div><div class="stat-label">Graduate GPA · Dean's List</div></div>
-        <div class="stat-card fade-in"><div class="stat-number">4+</div><div class="stat-label">Google · Amazon · Glassdoor · Capital One</div></div>
-        <div class="stat-card fade-in"><div class="stat-number">10+</div><div class="stat-label">Programming languages</div></div>
-    </div>
-</div>
 
 <!-- ══ Experience — Journey layout ══ -->
 <div class="section-inner" id="experience">
@@ -584,7 +572,7 @@
             <div class="skill-tags">
                 <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/javascript" alt="">JavaScript</span>
                 <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/python" alt="">Python</span>
-                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/openjdk" alt="">Java</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="">Java</span>
                 <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/cplusplus" alt="">C++</span>
                 <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/ruby" alt="">Ruby</span>
                 <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/haskell" alt="">Haskell</span>
@@ -608,7 +596,7 @@
             <div class="skill-cat-title">Backend &amp; Cloud</div>
             <div class="skill-tags">
                 <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/springboot" alt="">Spring Boot</span>
-                <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/amazonwebservices" alt="">AWS</span>
+                <span class="skill-tag"><img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg" alt="">AWS</span>
                 <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/firebase" alt="">Firebase</span>
                 <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/linux" alt="">Linux</span>
                 <span class="skill-tag"><img class="skill-icon" src="https://cdn.simpleicons.org/googlecloud" alt="">Cloud Shell</span>
@@ -805,7 +793,7 @@ if (typeof THREE !== 'undefined') {
 } /* end THREE guard */
 
 /* ── Card 3D tilt ── */
-document.querySelectorAll('.story-card, .edu-card, .exp-card, .stat-card, .skill-card').forEach((card, i) => {
+document.querySelectorAll('.story-card, .edu-card, .exp-card, .skill-card').forEach((card, i) => {
     card.addEventListener('mousemove', (e) => {
         const r = card.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width  - 0.5;
