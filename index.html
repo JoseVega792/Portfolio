@@ -138,7 +138,18 @@
         .btn-secondary:hover { background:var(--surface);transform:scale(1.02); }
 
         .globe-wrapper { display:flex;align-items:center;justify-content:center;opacity:0;animation:fadeIn 1.2s ease 1s forwards; }
-        #globe-canvas { width:440px;height:440px;display:block; }
+        #hero-avatar {
+            width:420px;height:420px;object-fit:contain;
+            animation:heroFloat 4s ease-in-out infinite;
+            filter:drop-shadow(0 24px 48px rgba(0,0,0,0.15));
+        }
+        [data-theme="dark"] #hero-avatar {
+            filter:drop-shadow(0 24px 60px rgba(0,0,0,0.50));
+        }
+        @keyframes heroFloat {
+            0%,100% { transform:translateY(0); }
+            50%      { transform:translateY(-14px); }
+        }
 
         /* ── Sections ── */
         .section-inner { max-width:1080px;margin:0 auto;padding:96px 48px; }
@@ -387,7 +398,7 @@
             </div>
         </div>
         <div class="globe-wrapper">
-            <canvas id="globe-canvas"></canvas>
+            <img src="me.png" alt="Jose Vega" id="hero-avatar">
         </div>
     </div>
 </div>
@@ -613,7 +624,6 @@ toggle.addEventListener('click', () => {
     const isDark = root.getAttribute('data-theme') === 'dark';
     root.setAttribute('data-theme', isDark ? 'light' : 'dark');
     localStorage.setItem('theme', isDark ? 'light' : 'dark');
-    updateGlobeTheme(!isDark);
 });
 
 /* ── Scroll animations (all three variants) ── */
@@ -784,96 +794,6 @@ document.querySelectorAll('.story-card').forEach((card, i) => {
         setTimeout(() => { card.style.transition = ''; }, 520);
     });
 });
-
-/* ══════════════════════════════════════════
-   3D Globe (hero)
-══════════════════════════════════════════ */
-let globeDotMat, globeLineMat, globeWfMat;
-
-function updateGlobeTheme(isDark) {
-    if (globeDotMat)  globeDotMat.color.set(isDark  ? 0xffffff : 0x111111);
-    if (globeLineMat) globeLineMat.color.set(isDark ? 0xffffff : 0x111111);
-    if (globeWfMat)   globeWfMat.color.set(isDark   ? 0xffffff : 0x000000);
-    if (globeLineMat) globeLineMat.opacity = isDark  ? 0.14 : 0.10;
-    if (globeWfMat)   globeWfMat.opacity   = isDark  ? 0.05 : 0.035;
-}
-
-(function () {
-    if (typeof THREE === 'undefined') return;
-
-    const canvas = document.getElementById('globe-canvas');
-    const SIZE   = 440;
-
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setSize(SIZE, SIZE);
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.setClearColor(0x000000, 0);
-
-    const scene  = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-    camera.position.z = 2.9;
-
-    const group = new THREE.Group();
-    scene.add(group);
-
-    const R = 1, N = 560;
-    const pts = [], posArr = [];
-    for (let i = 0; i < N; i++) {
-        const phi   = Math.acos(-1 + (2 * i) / N);
-        const theta = Math.sqrt(N * Math.PI) * phi;
-        const x = R * Math.sin(phi) * Math.cos(theta);
-        const y = R * Math.sin(phi) * Math.sin(theta);
-        const z = R * Math.cos(phi);
-        pts.push(new THREE.Vector3(x, y, z));
-        posArr.push(x, y, z);
-    }
-
-    const dotGeo = new THREE.BufferGeometry();
-    dotGeo.setAttribute('position', new THREE.Float32BufferAttribute(posArr, 3));
-    globeDotMat = new THREE.PointsMaterial({ color: 0x111111, size: 0.017, transparent: true, opacity: 0.75 });
-    group.add(new THREE.Points(dotGeo, globeDotMat));
-
-    const lineArr = [];
-    const MAX_LINES = 280, THRESH = 0.37;
-    outer: for (let i = 0; i < pts.length; i++) {
-        for (let j = i + 1; j < pts.length; j++) {
-            if (pts[i].distanceTo(pts[j]) < THRESH) {
-                lineArr.push(pts[i].x, pts[i].y, pts[i].z, pts[j].x, pts[j].y, pts[j].z);
-                if (lineArr.length / 6 >= MAX_LINES) break outer;
-            }
-        }
-    }
-    const lineGeo = new THREE.BufferGeometry();
-    lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(lineArr, 3));
-    globeLineMat = new THREE.LineBasicMaterial({ color: 0x111111, transparent: true, opacity: 0.10 });
-    group.add(new THREE.LineSegments(lineGeo, globeLineMat));
-
-    globeWfMat = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true, transparent: true, opacity: 0.035 });
-    group.add(new THREE.Mesh(new THREE.SphereGeometry(R, 20, 20), globeWfMat));
-
-    updateGlobeTheme(root.getAttribute('data-theme') === 'dark');
-
-    let mx = 0, my = 0;
-    document.addEventListener('mousemove', e => {
-        mx = e.clientX / innerWidth  - 0.5;
-        my = e.clientY / innerHeight - 0.5;
-    });
-
-    let t = 0;
-    (function animate() {
-        requestAnimationFrame(animate);
-        t += 0.004;
-        group.rotation.y = t + mx * 0.45;
-        group.rotation.x += (my * 0.35 - group.rotation.x) * 0.04;
-        renderer.render(scene, camera);
-    })();
-
-    window.addEventListener('resize', () => {
-        const s = Math.min(canvas.parentElement.clientWidth, 480);
-        renderer.setSize(s, s);
-        camera.updateProjectionMatrix();
-    });
-})();
 
 /* ══════════════════════════════════════════
    UTEP Pickaxe (education section)
