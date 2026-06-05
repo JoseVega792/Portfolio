@@ -800,10 +800,10 @@ document.querySelectorAll('.story-card').forEach((card, i) => {
 });
 
 /* ══════════════════════════════════════════
-   UTEP Logo — full mesh (no PNG)
+   Graduation cap mesh (education section)
 ══════════════════════════════════════════ */
 if (typeof THREE !== 'undefined') {
-    function initUTEPMesh(canvas) {
+    function initGradCap(canvas) {
         const S = 72;
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         renderer.setSize(S, S);
@@ -811,8 +811,8 @@ if (typeof THREE !== 'undefined') {
         renderer.setClearColor(0, 0);
 
         const scene  = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(52, 1, 0.1, 100);
-        camera.position.z = 2.1;
+        const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
+        camera.position.z = 2.0;
 
         const C = 0xFF8200; // UTEP orange
 
@@ -821,86 +821,58 @@ if (typeof THREE !== 'undefined') {
         pl.position.set(2, 2, 3);
         scene.add(pl);
 
-        // Edge-line + translucent-fill combo for each piece
-        const lm = new THREE.LineBasicMaterial({ color: C, transparent: true, opacity: 0.85 });
-        const fm = new THREE.MeshPhongMaterial({ color: C, transparent: true, opacity: 0.14, shininess: 80 });
-        function part(geo) {
+        const lm = new THREE.LineBasicMaterial({ color: C, transparent: true, opacity: 0.80 });
+        const fm = new THREE.MeshPhongMaterial({ color: C, transparent: true, opacity: 0.15, shininess: 80 });
+        function part(geo, wire = false) {
             const g = new THREE.Group();
-            g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lm));
+            const lineGeo = wire ? new THREE.WireframeGeometry(geo) : new THREE.EdgesGeometry(geo);
+            g.add(new THREE.LineSegments(lineGeo, lm));
             g.add(new THREE.Mesh(geo.clone(), fm));
             return g;
         }
 
         const root = new THREE.Group();
-        root.rotation.y =  0.28;
-        root.rotation.x = -0.12;
+        root.rotation.y =  0.50;   // show board corner
+        root.rotation.x = -0.32;   // slight top-down view
         scene.add(root);
 
-        // ── Background grid (the logo box) ──
-        const bgGeo = new THREE.PlaneGeometry(1.9, 1.9, 8, 8);
-        root.add(new THREE.LineSegments(
-            new THREE.WireframeGeometry(bgGeo),
-            new THREE.LineBasicMaterial({ color: C, transparent: true, opacity: 0.12 })
-        ));
-        root.add(new THREE.Mesh(bgGeo,
-            new THREE.MeshBasicMaterial({ color: C, transparent: true, opacity: 0.05, side: THREE.DoubleSide })
-        ));
+        // Flat square board — WireframeGeometry shows the subdivision grid
+        const boardGeo = new THREE.BoxGeometry(1.20, 0.07, 1.20, 5, 1, 5);
+        const board = part(boardGeo, true);
+        board.position.set(0, 0.12, 0);
+        root.add(board);
 
-        // ── Pickaxe head ──
-        // Wide arc: R=0.55, 2.0 rad, centred about Y-axis → start angle π/2 − 1.0 = 0.571
-        // Arc centre placed at (0, 0.12) → endpoints at (±0.462, 0.415), top at (0, 0.67)
-        const arcGeo = new THREE.TorusGeometry(0.55, 0.040, 8, 40, 2.0);
-        const arc = part(arcGeo);
-        arc.rotation.z = 0.571;
-        arc.position.set(0, 0.12, 0);
-        root.add(arc);
+        // Cylinder cap sitting under the board centre
+        const capGeo = new THREE.CylinderGeometry(0.28, 0.22, 0.30, 10);
+        const cap = part(capGeo);
+        cap.position.set(0, -0.025, 0); // top at 0.125 ≈ board bottom
+        root.add(cap);
 
-        // Left tine (pick) — base at (−0.462, 0.415), apex down-left (rotation 150°)
-        // centre = endpoint + (h/2)·apex_dir  apex_dir=(−0.5,−0.866)
-        const pickGeo = new THREE.CylinderGeometry(0, 0.040, 0.28, 8);
-        const pick = part(pickGeo);
-        pick.rotation.z = Math.PI * 5 / 6;
-        pick.position.set(-0.462 + 0.14 * -0.5,  0.415 + 0.14 * -0.866, 0); // (−0.532, 0.294)
-        root.add(pick);
+        // Small button at board centre-top
+        const btnGeo = new THREE.SphereGeometry(0.046, 8, 6);
+        const btn = part(btnGeo);
+        btn.position.set(0, 0.175, 0);
+        root.add(btn);
 
-        // Right tine (adze) — base at (0.462, 0.415), apex down-right
-        const adzeGeo = new THREE.CylinderGeometry(0, 0.040, 0.24, 8);
-        const adze = part(adzeGeo);
-        adze.rotation.z = -Math.PI * 5 / 6;
-        adze.position.set(0.462 + 0.12 * 0.5,  0.415 + 0.12 * -0.866, 0); // (0.522, 0.311)
-        root.add(adze);
+        // Tassel cord drooping to the right
+        // rotation.z = π/6 → local +Y points up-left, so bottom of cord goes down-right
+        const cordGeo = new THREE.CylinderGeometry(0.011, 0.011, 0.46, 6);
+        const cord = part(cordGeo);
+        cord.rotation.z =  Math.PI / 6;
+        cord.rotation.x = -0.12;
+        cord.position.set(0.11, -0.005, 0.07);
+        root.add(cord);
 
-        // Handle — connects head to text area; top flush with arc endpoints
-        const handleGeo = new THREE.CylinderGeometry(0.030, 0.038, 0.65, 8);
-        const handle = part(handleGeo);
-        handle.position.set(0, 0.415 - 0.325, 0); // centre at y = 0.090, top 0.415, bottom −0.235
-        root.add(handle);
+        // Tassel end (small cylinder at cord tip)
+        const tasGeo = new THREE.CylinderGeometry(0.036, 0.024, 0.13, 6);
+        const tas = part(tasGeo);
+        tas.position.set(0.225, -0.225, 0.09);
+        root.add(tas);
 
         renderer.render(scene, camera);
-
-        // ── "UTEP" text (loaded async) ──
-        if (THREE.FontLoader) {
-            new THREE.FontLoader().load(
-                'https://threejs.org/examples/fonts/helvetiker_bold.typeface.json',
-                font => {
-                    const tGeo = new THREE.TextGeometry('UTEP', {
-                        font, size: 0.23, height: 0.04,
-                        curveSegments: 3, bevelEnabled: false,
-                    });
-                    tGeo.computeBoundingBox();
-                    const tw = tGeo.boundingBox.max.x - tGeo.boundingBox.min.x;
-                    const textGroup = part(tGeo);
-                    textGroup.position.set(-tw / 2, -0.60, 0);
-                    root.add(textGroup);
-                    renderer.render(scene, camera);
-                },
-                undefined,
-                () => renderer.render(scene, camera) // font failed — keep pickaxe-only render
-            );
-        }
     }
 
-    document.querySelectorAll('.edu-canvas').forEach(c => initUTEPMesh(c));
+    document.querySelectorAll('.edu-canvas').forEach(c => initGradCap(c));
 }
 
 </script>
