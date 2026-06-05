@@ -650,19 +650,21 @@ if (typeof THREE !== 'undefined') {
         }
 
         if (idx === 0) {
-            /* ── Capital One: wallet ── */
-            // Body
-            const body = mesh(new THREE.BoxGeometry(0.80, 0.52, 0.10));
-            g.add(body);
-            // Card slot (slightly raised)
-            const slot = mesh(new THREE.BoxGeometry(0.62, 0.28, 0.06));
-            slot.position.set(0, 0.05, 0.08);
-            g.add(slot);
-            // Coin pocket bump
-            const pocket = mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.06, 16));
-            pocket.rotation.x = Math.PI / 2;
-            pocket.position.set(0.27, 0.05, 0.08);
-            g.add(pocket);
+            /* ── Capital One: credit card ── */
+            // Card body (standard credit card proportions)
+            const card = mesh(new THREE.BoxGeometry(0.88, 0.58, 0.04));
+            g.add(card);
+            // Chip (upper-left)
+            const chip = mesh(new THREE.BoxGeometry(0.18, 0.14, 0.055));
+            chip.position.set(-0.26, 0.13, 0.028);
+            g.add(chip);
+            // Two embossed number lines (lower half)
+            const line1 = mesh(new THREE.BoxGeometry(0.62, 0.038, 0.055));
+            line1.position.set(0, -0.08, 0.028);
+            g.add(line1);
+            const line2 = mesh(new THREE.BoxGeometry(0.38, 0.038, 0.055));
+            line2.position.set(-0.12, -0.18, 0.028);
+            g.add(line2);
 
         } else if (idx === 1) {
             /* ── Glassdoor: door ── */
