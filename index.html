@@ -28,7 +28,6 @@
             --nav-border:  rgba(0,0,0,0.08);
             --inv-bg:      #0a0a0a;
             --inv-color:   #ffffff;
-            --contact-bg:  #0a0a0a;
             --card-filter: none;
             --tag-hover:   #0a0a0a;
             --tag-hover-c: #ffffff;
@@ -52,7 +51,6 @@
             --nav-border:  rgba(255,255,255,0.07);
             --inv-bg:      #ffffff;
             --inv-color:   #000000;
-            --contact-bg:  #0d0d0d;
             --card-filter: blur(12px) saturate(160%);
             --tag-hover:   rgba(255,255,255,0.14);
             --tag-hover-c: #ffffff;
@@ -290,12 +288,23 @@
         .skill-tag:hover { background:var(--tag-hover);color:var(--tag-hover-c);border-color:var(--tag-hover);transform:scale(1.05); }
 
         /* ── Contact ── */
-        .contact-strip { background:var(--contact-bg);transition:background-color .35s; }
+        .contact-strip {
+            background: linear-gradient(160deg, #0e0e20 0%, #12121e 45%, #0a0a16 100%);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            position: relative;
+        }
+        /* Soft fade from page into the section */
+        .contact-strip::before {
+            content:'';position:absolute;top:0;left:0;right:0;height:1px;
+            background:linear-gradient(90deg,transparent,rgba(99,102,241,.35),rgba(139,92,246,.35),transparent);
+            pointer-events:none;
+        }
         .contact-inner { max-width:1080px;margin:0 auto;padding:96px 48px;text-align:center;position:relative;overflow:hidden; }
-        .contact-inner::before { content:"";position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(255,255,255,.05) 0%,transparent 65%);pointer-events:none; }
-        .contact-title { font-size:clamp(36px,5vw,60px);font-weight:700;letter-spacing:-2.5px;color:#fff;margin-bottom:14px; }
-        .contact-sub { font-size:16px;color:rgba(255,255,255,.45);margin-bottom:40px; }
-        .contact-links { display:flex;gap:12px;justify-content:center;flex-wrap:wrap; }
+        /* Ambient glow in center */
+        .contact-inner::after { content:"";position:absolute;top:-150px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(99,102,241,.10) 0%,rgba(139,92,246,.06) 40%,transparent 70%);pointer-events:none; }
+        .contact-title { font-size:clamp(36px,5vw,60px);font-weight:700;letter-spacing:-2.5px;color:#fff;margin-bottom:14px;position:relative;z-index:1; }
+        .contact-sub { font-size:16px;color:rgba(255,255,255,.42);margin-bottom:40px;position:relative;z-index:1; }
+        .contact-links { display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1; }
         .cl { display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:980px;text-decoration:none;font-size:14px;font-weight:500;transition:all .2s; }
         .cl:hover { transform:scale(1.03); }
         .cl-white { background:#fff;color:#000; }
