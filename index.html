@@ -637,20 +637,14 @@ if (typeof THREE !== 'undefined') {
 
     const sessions = [null, null, null, null];
 
-    function makeMat(color, wireframe) {
-        return wireframe
-            ? new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity: 0.60 })
-            : new THREE.MeshPhongMaterial({ color, transparent: true, opacity: 0.13, shininess: 80 });
-    }
-
     function buildGroup(idx, color) {
         const g = new THREE.Group();
-        const wm = makeMat(color, true);
-        const fm = makeMat(color, false);
+        const fm = new THREE.MeshPhongMaterial({ color, transparent: true, opacity: 0.13, shininess: 80 });
+        const lm = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.65 });
 
         function mesh(geo) {
             const grp = new THREE.Group();
-            grp.add(new THREE.Mesh(geo, wm));
+            grp.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lm));
             grp.add(new THREE.Mesh(geo.clone(), fm));
             return grp;
         }
