@@ -701,15 +701,18 @@ if (typeof THREE !== 'undefined') {
 
         } else if (idx === 3) {
             /* ── Google: magnifying glass ── */
-            // Lens ring
+            // Center the whole icon in the canvas
+            g.position.set(-0.08, 0.08, 0);
+            // Lens ring — radius 0.28, tube 0.062, outer edge at ~0.342
             const lens = mesh(new THREE.TorusGeometry(0.28, 0.062, 10, 36));
-            // Offset group so the whole icon looks centered
-            g.position.set(-0.10, 0.10, 0);
             g.add(lens);
-            // Handle
+            // Handle — connects at lower-right of torus (−45°) and extends further down-right
+            // Torus outer edge at -45°: (0.342*cos-45, 0.342*sin-45) = (0.242, -0.242)
+            // Handle center = edge + 0.19*(0.707,-0.707) = (0.376, -0.376)
+            // rotation.z = -3π/4 makes cylinder axis point in (0.707, -0.707) direction
             const handle = mesh(new THREE.CylinderGeometry(0.046, 0.046, 0.38, 10));
-            handle.rotation.z = -Math.PI / 4;
-            handle.position.set(0.30, -0.30, 0);
+            handle.rotation.z = -3 * Math.PI / 4;
+            handle.position.set(0.376, -0.376, 0);
             g.add(handle);
         }
 
