@@ -833,7 +833,7 @@ if (typeof THREE !== 'undefined') {
         const root = new THREE.Group();
         scene.add(root);
 
-        const hw = 0.24, hh = 0.28, tk = 0.063;
+        const hw = 0.15, hh = 0.33, tk = 0.060;
 
         function stroke(x1, y1, x2, y2) {
             const mx = (x1+x2)/2, my = (y1+y2)/2;
@@ -847,30 +847,30 @@ if (typeof THREE !== 'undefined') {
             root.add(grp);
         }
 
-        // U — top-left
-        const ux = -0.32, uy = 0.33;
-        stroke(ux-hw, uy-hh, ux-hw, uy+hh);
-        stroke(ux+hw, uy-hh, ux+hw, uy+hh);
-        stroke(ux-hw, uy-hh, ux+hw, uy-hh);
+        // U — left
+        const ux = -0.54;
+        stroke(ux-hw, -hh, ux-hw,  hh);
+        stroke(ux+hw, -hh, ux+hw,  hh);
+        stroke(ux-hw, -hh, ux+hw, -hh);
 
-        // T — top-right
-        const tx = 0.32, ty = 0.33;
-        stroke(tx-hw, ty+hh, tx+hw, ty+hh);
-        stroke(tx,    ty+hh, tx,    ty-hh);
+        // T
+        const tx = -0.18;
+        stroke(tx-hw,  hh, tx+hw,  hh);
+        stroke(tx,     hh, tx,    -hh);
 
-        // E — bottom-left
-        const ex = -0.32, ey = -0.33;
-        stroke(ex-hw, ey-hh, ex-hw, ey+hh);
-        stroke(ex-hw, ey+hh, ex+hw, ey+hh);
-        stroke(ex-hw, ey,    ex+hw*0.5, ey);
-        stroke(ex-hw, ey-hh, ex+hw, ey-hh);
+        // E
+        const ex = 0.18;
+        stroke(ex-hw, -hh, ex-hw,  hh);
+        stroke(ex-hw,  hh, ex+hw,  hh);
+        stroke(ex-hw,  0,  ex+hw*0.4, 0);
+        stroke(ex-hw, -hh, ex+hw, -hh);
 
-        // P — bottom-right
-        const px = 0.32, py = -0.33;
-        stroke(px-hw, py-hh, px-hw, py+hh);
-        stroke(px-hw, py+hh, px+hw, py+hh);
-        stroke(px+hw, py,    px+hw, py+hh);
-        stroke(px-hw, py,    px+hw, py);
+        // P — right
+        const px = 0.54;
+        stroke(px-hw, -hh, px-hw,  hh);
+        stroke(px-hw,  hh, px+hw,  hh);
+        stroke(px+hw,  0,  px+hw,  hh);
+        stroke(px-hw,  0,  px+hw,  0);
 
         renderer.render(scene, camera);
     }
