@@ -739,7 +739,7 @@ if (typeof THREE !== 'undefined') {
         const group = buildGroup(idx, color);
         scene.add(group);
 
-        sessions[idx] = { renderer, scene, camera, group, hovered: false };
+        sessions[idx] = { renderer, scene, camera, group };
     }
 
     /* Lazy init */
@@ -754,17 +754,10 @@ if (typeof THREE !== 'undefined') {
 
     document.querySelectorAll('.company-canvas').forEach(c => cIO.observe(c));
 
-    /* Rotation speeds per icon */
-    const RX = [0.004, 0.003, 0.006, 0.0];
-    const RY = [0.010, 0.009, 0.008, 0.011];
-
     (function animateAll() {
         requestAnimationFrame(animateAll);
-        sessions.forEach((s, i) => {
+        sessions.forEach(s => {
             if (!s) return;
-            const spd = s.hovered ? 2.6 : 1;
-            s.group.rotation.x += RX[i] * spd;
-            s.group.rotation.y += RY[i] * spd;
             s.renderer.render(s.scene, s.camera);
         });
     })();
@@ -773,9 +766,6 @@ if (typeof THREE !== 'undefined') {
 
 /* ── Card 3D tilt ── */
 document.querySelectorAll('.story-card').forEach((card, i) => {
-    card.addEventListener('mouseenter', () => {
-        if (sessions && sessions[i]) sessions[i].hovered = true;
-    });
     card.addEventListener('mousemove', (e) => {
         const r = card.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width  - 0.5;
@@ -788,7 +778,6 @@ document.querySelectorAll('.story-card').forEach((card, i) => {
         card.style.transition = 'background-color .35s, border-color .35s, box-shadow .35s, transform .5s ease-out';
         card.style.transform  = '';
         card.style.boxShadow  = '';
-        if (sessions && sessions[i]) sessions[i].hovered = false;
         setTimeout(() => { card.style.transition = ''; }, 520);
     });
 });
