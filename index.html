@@ -920,16 +920,16 @@ if (typeof THREE !== 'undefined') {
         arc.position.set(0, -0.015, 0);  // center sits below head level
         root.add(arc);
 
-        // Pick (left) — thin tip at the far left
-        const pick = part(new THREE.CylinderGeometry(0.008, 0.050, 0.30, 8));
-        pick.rotation.z = Math.PI / 2;      // tip → -X
-        pick.position.set(-0.425, 0.24, 0); // base meets bar end at x=-0.275
+        // Pick (left) — true cone, sharp point at far left
+        const pick = part(new THREE.CylinderGeometry(0, 0.055, 0.32, 8));
+        pick.rotation.z = Math.PI / 2;       // apex (radius=0) → -X
+        pick.position.set(-0.435, 0.24, 0);  // base at x=-0.275, tip at x=-0.595
         root.add(pick);
 
-        // Adze (right) — wider chisel tip
-        const adze = part(new THREE.CylinderGeometry(0.050, 0.008, 0.25, 8));
-        adze.rotation.z = -Math.PI / 2;     // wider end → +X
-        adze.position.set(0.400, 0.24, 0);  // base meets bar end at x=+0.275
+        // Adze (right) — true cone, sharp point at far right
+        const adze = part(new THREE.CylinderGeometry(0, 0.055, 0.27, 8));
+        adze.rotation.z = -Math.PI / 2;      // apex (radius=0) → +X
+        adze.position.set(0.410, 0.24, 0);   // base at x=+0.275, tip at x=+0.545
         root.add(adze);
 
         // Handle
