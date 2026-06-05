@@ -800,10 +800,10 @@ document.querySelectorAll('.story-card').forEach((card, i) => {
 });
 
 /* ══════════════════════════════════════════
-   UTEP Logo — mesh vibe (education section)
+   UTEP Logo — full mesh (no PNG)
 ══════════════════════════════════════════ */
 if (typeof THREE !== 'undefined') {
-    function initUTEPLogo(canvas) {
+    function initUTEPMesh(canvas) {
         const S = 72;
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         renderer.setSize(S, S);
@@ -811,33 +811,96 @@ if (typeof THREE !== 'undefined') {
         renderer.setClearColor(0, 0);
 
         const scene  = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-        camera.position.z = 2.5;
+        const camera = new THREE.PerspectiveCamera(52, 1, 0.1, 100);
+        camera.position.z = 2.1;
 
-        // Subdivided plane — logo aspect 600:504 ≈ 1.19:1
-        const segs = 10;
-        const geo  = new THREE.PlaneGeometry(1.72, 1.44, segs, segs);
+        const C = 0xFF8200; // UTEP orange
 
-        const group = new THREE.Group();
-        group.rotation.y =  0.28;
-        group.rotation.x = -0.12;
-        scene.add(group);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+        const pl = new THREE.PointLight(C, 2.0, 10);
+        pl.position.set(2, 2, 3);
+        scene.add(pl);
 
-        // Orange wireframe grid overlay
-        const wireMat = new THREE.LineBasicMaterial({ color: 0xFF8200, transparent: true, opacity: 0.45 });
-        group.add(new THREE.LineSegments(new THREE.WireframeGeometry(geo), wireMat));
+        // Edge-line + translucent-fill combo for each piece
+        const lm = new THREE.LineBasicMaterial({ color: C, transparent: true, opacity: 0.85 });
+        const fm = new THREE.MeshPhongMaterial({ color: C, transparent: true, opacity: 0.14, shininess: 80 });
+        function part(geo) {
+            const g = new THREE.Group();
+            g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lm));
+            g.add(new THREE.Mesh(geo.clone(), fm));
+            return g;
+        }
 
-        // Logo texture on the same plane
-        new THREE.TextureLoader().load('utep.png', tex => {
-            const mat = new THREE.MeshBasicMaterial({ map: tex });
-            group.add(new THREE.Mesh(geo, mat));
-            renderer.render(scene, camera);
-        });
+        const root = new THREE.Group();
+        root.rotation.y =  0.28;
+        root.rotation.x = -0.12;
+        scene.add(root);
 
-        renderer.render(scene, camera); // show wireframe immediately while texture loads
+        // ── Background grid (the logo box) ──
+        const bgGeo = new THREE.PlaneGeometry(1.9, 1.9, 8, 8);
+        root.add(new THREE.LineSegments(
+            new THREE.WireframeGeometry(bgGeo),
+            new THREE.LineBasicMaterial({ color: C, transparent: true, opacity: 0.12 })
+        ));
+        root.add(new THREE.Mesh(bgGeo,
+            new THREE.MeshBasicMaterial({ color: C, transparent: true, opacity: 0.05, side: THREE.DoubleSide })
+        ));
+
+        // ── Pickaxe head ──
+        // Wide arc: R=0.55, 2.0 rad, centred about Y-axis → start angle π/2 − 1.0 = 0.571
+        // Arc centre placed at (0, 0.12) → endpoints at (±0.462, 0.415), top at (0, 0.67)
+        const arcGeo = new THREE.TorusGeometry(0.55, 0.040, 8, 40, 2.0);
+        const arc = part(arcGeo);
+        arc.rotation.z = 0.571;
+        arc.position.set(0, 0.12, 0);
+        root.add(arc);
+
+        // Left tine (pick) — base at (−0.462, 0.415), apex down-left (rotation 150°)
+        // centre = endpoint + (h/2)·apex_dir  apex_dir=(−0.5,−0.866)
+        const pickGeo = new THREE.CylinderGeometry(0, 0.040, 0.28, 8);
+        const pick = part(pickGeo);
+        pick.rotation.z = Math.PI * 5 / 6;
+        pick.position.set(-0.462 + 0.14 * -0.5,  0.415 + 0.14 * -0.866, 0); // (−0.532, 0.294)
+        root.add(pick);
+
+        // Right tine (adze) — base at (0.462, 0.415), apex down-right
+        const adzeGeo = new THREE.CylinderGeometry(0, 0.040, 0.24, 8);
+        const adze = part(adzeGeo);
+        adze.rotation.z = -Math.PI * 5 / 6;
+        adze.position.set(0.462 + 0.12 * 0.5,  0.415 + 0.12 * -0.866, 0); // (0.522, 0.311)
+        root.add(adze);
+
+        // Handle — connects head to text area; top flush with arc endpoints
+        const handleGeo = new THREE.CylinderGeometry(0.030, 0.038, 0.65, 8);
+        const handle = part(handleGeo);
+        handle.position.set(0, 0.415 - 0.325, 0); // centre at y = 0.090, top 0.415, bottom −0.235
+        root.add(handle);
+
+        renderer.render(scene, camera);
+
+        // ── "UTEP" text (loaded async) ──
+        if (THREE.FontLoader) {
+            new THREE.FontLoader().load(
+                'https://threejs.org/examples/fonts/helvetiker_bold.typeface.json',
+                font => {
+                    const tGeo = new THREE.TextGeometry('UTEP', {
+                        font, size: 0.23, height: 0.04,
+                        curveSegments: 3, bevelEnabled: false,
+                    });
+                    tGeo.computeBoundingBox();
+                    const tw = tGeo.boundingBox.max.x - tGeo.boundingBox.min.x;
+                    const textGroup = part(tGeo);
+                    textGroup.position.set(-tw / 2, -0.60, 0);
+                    root.add(textGroup);
+                    renderer.render(scene, camera);
+                },
+                undefined,
+                () => renderer.render(scene, camera) // font failed — keep pickaxe-only render
+            );
+        }
     }
 
-    document.querySelectorAll('.edu-canvas').forEach(c => initUTEPLogo(c));
+    document.querySelectorAll('.edu-canvas').forEach(c => initUTEPMesh(c));
 }
 
 </script>
