@@ -899,38 +899,63 @@ if (typeof THREE !== 'undefined') {
         scene.add(root);
 
         if (type === 'bolt') {
-            /* Lightning bolt: flat ExtrudeGeometry polygon */
+            /* Lightning bolt: extruded polygon + outer ring + spark fragments */
             const shape = new THREE.Shape();
-            shape.moveTo( 0.05,  0.55);
-            shape.lineTo(-0.15,  0.55);
-            shape.lineTo(-0.05,  0.05);
-            shape.lineTo(-0.20,  0.05);
-            shape.lineTo(-0.05, -0.55);
-            shape.lineTo( 0.15, -0.55);
-            shape.lineTo( 0.05, -0.05);
-            shape.lineTo( 0.20, -0.05);
+            shape.moveTo( 0.08,  0.52);
+            shape.lineTo(-0.18,  0.52);
+            shape.lineTo(-0.05,  0.04);
+            shape.lineTo(-0.22,  0.04);
+            shape.lineTo(-0.08, -0.52);
+            shape.lineTo( 0.18, -0.52);
+            shape.lineTo( 0.05, -0.04);
+            shape.lineTo( 0.22, -0.04);
             shape.closePath();
-            const geo = new THREE.ExtrudeGeometry(shape, { depth: 0.04, bevelEnabled: false });
-            const bolt = part(geo);
-            bolt.position.z = -0.02;
+            const bolt = part(new THREE.ExtrudeGeometry(shape, { depth: 0.06, bevelEnabled: false }));
+            bolt.position.z = -0.03;
             root.add(bolt);
+
+            // Energy ring framing the bolt
+            root.add(part(new THREE.TorusGeometry(0.40, 0.018, 6, 28)));
+
+            // Spark octahedra scattered around the bolt tips and sides
+            [ [ 0.30,  0.46, 0.058], [-0.30, -0.46, 0.058],
+              [ 0.38,  0.00, 0.040], [-0.38,  0.00, 0.040] ].forEach(([x, y, r]) => {
+                const sp = part(new THREE.OctahedronGeometry(r));
+                sp.position.set(x, y, 0);
+                root.add(sp);
+            });
+
         } else {
-            /* Bird: two wing bars + small body */
-            // Left wing (goes up-left from body)
-            const lwGeo = new THREE.BoxGeometry(0.52, 0.09, 0.04);
-            const lw = part(lwGeo);
-            lw.rotation.z = 0.40;
-            lw.position.set(-0.20, 0.07, 0);
-            root.add(lw);
-            // Right wing (mirror)
-            const rwGeo = new THREE.BoxGeometry(0.52, 0.09, 0.04);
-            const rw = part(rwGeo);
-            rw.rotation.z = -0.40;
-            rw.position.set(0.20, 0.07, 0);
-            root.add(rw);
+            /* Bird: tapered wings + body + head + beak + tail */
+
+            // Wings: tapered cylinders, wider at body end and narrower at wingtip
+            [[-1], [1]].forEach(([side]) => {
+                const wGeo = new THREE.CylinderGeometry(0.022, 0.058, 0.56, 6);
+                const w = part(wGeo);
+                w.rotation.z = side * -0.40;
+                w.position.set(side * 0.21, 0.08, 0);
+                root.add(w);
+            });
+
             // Body
-            const bodyGeo = new THREE.SphereGeometry(0.09, 8, 6);
-            root.add(part(bodyGeo));
+            root.add(part(new THREE.SphereGeometry(0.10, 8, 6)));
+
+            // Head (slightly forward and up from body)
+            const head = part(new THREE.SphereGeometry(0.063, 8, 6));
+            head.position.set(0.06, 0.17, 0);
+            root.add(head);
+
+            // Beak (small cone pointing right)
+            const beak = part(new THREE.ConeGeometry(0.028, 0.12, 6));
+            beak.rotation.z = -Math.PI / 2;
+            beak.position.set(0.17, 0.17, 0);
+            root.add(beak);
+
+            // Tail (small box behind body, angled slightly down)
+            const tail = part(new THREE.BoxGeometry(0.20, 0.07, 0.04));
+            tail.position.set(-0.04, -0.18, 0);
+            tail.rotation.z = -0.12;
+            root.add(tail);
         }
 
         renderer.render(scene, camera);
