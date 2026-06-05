@@ -902,13 +902,13 @@ if (typeof THREE !== 'undefined') {
             /* Classic ⚡ shape: wide top, one-sided step/notch, pointed tip — yellow mesh */
             const shape = new THREE.Shape();
             shape.moveTo(-0.14,  0.60);   // top-left
-            shape.lineTo( 0.22,  0.60);   // top-right (wide)
-            shape.lineTo( 0.06,  0.02);   // right side steps inward
-            shape.lineTo( 0.26,  0.02);   // right step bumps OUT
+            shape.lineTo( 0.24,  0.60);   // top-right
+            shape.lineTo( 0.08,  0.02);   // right notch inner
+            shape.lineTo( 0.28,  0.00);   // right notch outer bump
             shape.lineTo(-0.06, -0.60);   // pointed tip
-            shape.lineTo(-0.26, -0.02);   // left side outer (the missing left notch)
-            shape.lineTo(-0.06, -0.02);   // left step back inward
-            shape.closePath();            // → top-left: diagonal closes the upper-left edge
+            shape.lineTo(-0.06,  0.00);   // left notch inner (straight up from tip)
+            shape.lineTo(-0.22,  0.02);   // left notch outer (steps left — upper-left comes inward here)
+            shape.closePath();            // → top-left diagonal
             const bolt = part(new THREE.ExtrudeGeometry(shape, { depth: 0.07, bevelEnabled: false }));
             bolt.position.z = -0.035;
             root.add(bolt);
