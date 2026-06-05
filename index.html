@@ -912,11 +912,13 @@ if (typeof THREE !== 'undefined') {
         root.rotation.x = -0.12;
         scene.add(root);
 
-        // Horizontal head bar
-        const bar = part(new THREE.CylinderGeometry(0.050, 0.050, 0.55, 8));
-        bar.rotation.z = Math.PI / 2;
-        bar.position.set(0, 0.24, 0);
-        root.add(bar);
+        // Curved head bar (partial torus arc bowing upward)
+        // Chord width = 0.55, peak rise = 0.13 → R = 0.395, arc = 1.62 rad
+        // Start angle (right endpoint at x=0.275, y=0.255 rel. to center): 0.774 rad
+        const arc = part(new THREE.TorusGeometry(0.395, 0.045, 8, 40, 1.62));
+        arc.rotation.z = 0.774;          // rotate so arc starts at right endpoint
+        arc.position.set(0, -0.015, 0);  // center sits below head level
+        root.add(arc);
 
         // Pick (left) — thin tip at the far left
         const pick = part(new THREE.CylinderGeometry(0.008, 0.050, 0.30, 8));
