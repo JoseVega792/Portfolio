@@ -303,6 +303,28 @@
         .skill-tag:hover .skill-icon { filter:brightness(0) invert(1);opacity:1; }
         .skill-tag:hover { background:var(--tag-hover);color:var(--tag-hover-c);border-color:var(--tag-hover);transform:scale(1.05); }
 
+        /* ── Projects ── */
+        .projects-grid { display:flex;flex-direction:column;gap:14px; }
+        .project-card { display:grid;grid-template-columns:1fr 200px;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);backdrop-filter:var(--card-filter);-webkit-backdrop-filter:var(--card-filter);transition:background-color .35s,border-color .35s,box-shadow .35s,transform .3s; }
+        .project-card:hover { border-color:var(--border-h);transform:translateY(-3px);box-shadow:var(--shadow-md); }
+        .project-body { padding:30px 34px; }
+        .project-card .card-vis { border-right:none;border-left:1px solid var(--border); }
+        .card-vis[data-co="dr"]::before { background:#ff9a3c; }
+        .card-vis[data-co="dr"] { background:rgba(255,154,60,.04); }
+        [data-theme="dark"] .card-vis[data-co="dr"] { background:rgba(255,154,60,.08); }
+        .project-top { display:flex;align-items:center;gap:12px;margin-bottom:10px; }
+        .project-name { font-size:18px;font-weight:600;letter-spacing:-.4px;color:var(--text-1); }
+        .project-live { font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:3px 10px;border-radius:980px;background:rgba(34,197,94,.12);color:#16a34a;border:1px solid rgba(34,197,94,.25); }
+        [data-theme="dark"] .project-live { background:rgba(34,197,94,.10);color:#4ade80;border-color:rgba(74,222,128,.22); }
+        .project-desc { font-size:13.5px;color:var(--text-2);line-height:1.7;margin-bottom:16px;max-width:680px; }
+        .project-tags { display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px; }
+        .project-tag { padding:4px 12px;background:var(--bg);border:1px solid var(--border);border-radius:980px;font-size:12px;font-weight:500;color:var(--text-3);transition:background-color .35s,border-color .35s; }
+        .project-links { display:flex;gap:10px; }
+        .project-link-primary { padding:8px 20px;background:var(--inv-bg);color:var(--inv-color);border-radius:980px;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:-.1px;transition:opacity .2s,transform .2s,background-color .35s,color .35s; }
+        .project-link-primary:hover { opacity:.85;transform:scale(1.03); }
+        .project-link-ghost { padding:8px 20px;background:transparent;color:var(--text-2);border:1px solid var(--border-h);border-radius:980px;text-decoration:none;font-size:12px;font-weight:500;transition:background-color .2s,color .35s,border-color .35s,transform .2s; }
+        .project-link-ghost:hover { background:var(--surface);color:var(--text-1);transform:scale(1.03); }
+
         /* ── Contact ── */
         .contact-strip {}
         .contact-inner { max-width:1080px;margin:0 auto;padding:96px 48px;text-align:center; }
@@ -350,6 +372,7 @@
             .story-card,.story-card.story-flip{grid-template-columns:1fr}
             .skills-stack{grid-template-columns:1fr}
             .card-vis{border-right:none!important;border-left:none!important;border-bottom:1px solid var(--border);min-height:200px}
+            .project-card{grid-template-columns:1fr}
         }
     </style>
 </head>
@@ -370,6 +393,7 @@
         <ul class="nav-links">
             <li><a href="#experience">Experience</a></li>
             <li><a href="#research">Research</a></li>
+            <li><a href="#projects">Projects</a></li>
             <li><a href="#education">Education</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#contact">Contact</a></li>
@@ -529,6 +553,44 @@
                     <li>Developed a CNN that improved Mallard duck species identification accuracy to 94.9%.</li>
                     <li>Contributed standardized identification methods adopted by the Texas Parks &amp; Wildlife Department for wildlife management and research.</li>
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Projects -->
+<div class="section-inner" id="projects">
+    <p class="section-label fade-in">What I've shipped</p>
+    <h2 class="section-title fade-in">Projects</h2>
+    <div class="projects-grid">
+        <div class="project-card fade-in">
+            <div class="project-body">
+                <div class="project-top">
+                    <span class="project-name">DineRoulette</span>
+                    <span class="project-live">Live</span>
+                </div>
+                <p class="project-desc">
+                    A restaurant discovery app that lets you swipe through nearby spots Tinder-style.
+                    Pick your favorite cuisines, filter by distance and party size, save favorites, and
+                    let AI-generated descriptions help you decide — or hit random pick and let it choose for you.
+                </p>
+                <div class="project-tags">
+                    <span class="project-tag">React</span>
+                    <span class="project-tag">Node.js</span>
+                    <span class="project-tag">Express</span>
+                    <span class="project-tag">Supabase</span>
+                    <span class="project-tag">Google Places API</span>
+                    <span class="project-tag">Claude AI</span>
+                    <span class="project-tag">Railway</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://dine-roulette.up.railway.app" target="_blank" rel="noopener" class="project-link-primary">Live Demo ↗</a>
+                    <a href="https://github.com/JoseVega792/Dine-Roulette" target="_blank" rel="noopener" class="project-link-ghost">GitHub ↗</a>
+                </div>
+            </div>
+            <div class="card-vis" data-co="dr">
+                <canvas id="dine-canvas" width="160" height="160" style="display:block"></canvas>
+                <span class="vis-co-name">DineRoulette</span>
             </div>
         </div>
     </div>
@@ -793,7 +855,7 @@ if (typeof THREE !== 'undefined') {
 } /* end THREE guard */
 
 /* ── Card 3D tilt ── */
-document.querySelectorAll('.story-card, .edu-card, .exp-card, .skill-card').forEach((card, i) => {
+document.querySelectorAll('.story-card, .edu-card, .exp-card, .skill-card, .project-card').forEach((card, i) => {
     card.addEventListener('mousemove', (e) => {
         const r = card.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width  - 0.5;
@@ -995,6 +1057,85 @@ if (typeof THREE !== 'undefined') {
     }
 
     document.querySelectorAll('.research-canvas').forEach(c => initResearchMesh(c));
+}
+
+/* ══════════════════════════════════════════
+   DineRoulette dice mesh
+══════════════════════════════════════════ */
+if (typeof THREE !== 'undefined') {
+    function initDineScene(canvas) {
+        const S = 160;
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setSize(S, S);
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+        renderer.setClearColor(0, 0);
+
+        const scene  = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+        camera.position.z = 2.8;
+
+        const C = 0xFF9A3C;
+        scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+        const pl = new THREE.PointLight(C, 2.0, 10);
+        pl.position.set(2, 2, 3);
+        scene.add(pl);
+
+        const lm = new THREE.LineBasicMaterial({ color: C, transparent: true, opacity: 0.65 });
+        const fm = new THREE.MeshPhongMaterial({ color: C, transparent: true, opacity: 0.13, shininess: 80 });
+        function part(geo) {
+            const grp = new THREE.Group();
+            grp.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lm));
+            grp.add(new THREE.Mesh(geo.clone(), fm));
+            return grp;
+        }
+
+        function addPips(group, positions, z) {
+            positions.forEach(([x, y]) => {
+                const p = part(new THREE.SphereGeometry(0.048, 6, 6));
+                p.position.set(x, y, z);
+                group.add(p);
+            });
+        }
+
+        const root = new THREE.Group();
+        scene.add(root);
+
+        /* ── Die 1 — showing 6 (top-left) ── */
+        const die1 = new THREE.Group();
+        die1.position.set(-0.24, 0.18, 0);
+        die1.rotation.set(0.28, 0.38, 0.05);
+        die1.add(part(new THREE.BoxGeometry(0.50, 0.50, 0.50)));
+        addPips(die1, [
+            [-0.12,  0.13], [0.12,  0.13],
+            [-0.12,  0.00], [0.12,  0.00],
+            [-0.12, -0.13], [0.12, -0.13],
+        ], 0.26);
+        root.add(die1);
+
+        /* ── Die 2 — showing 5 (bottom-right) ── */
+        const die2 = new THREE.Group();
+        die2.position.set(0.24, -0.18, 0);
+        die2.rotation.set(-0.20, -0.32, -0.08);
+        die2.add(part(new THREE.BoxGeometry(0.50, 0.50, 0.50)));
+        addPips(die2, [
+            [-0.13,  0.13], [0.13,  0.13],
+            [  0.0,   0.0],
+            [-0.13, -0.13], [0.13, -0.13],
+        ], 0.26);
+        root.add(die2);
+
+        renderer.render(scene, camera);
+    }
+
+    const dineCanvas = document.getElementById('dine-canvas');
+    if (dineCanvas) {
+        const dcIO = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) { initDineScene(e.target); dcIO.unobserve(e.target); }
+            });
+        }, { rootMargin: '200px' });
+        dcIO.observe(dineCanvas);
+    }
 }
 
 </script>
